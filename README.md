@@ -1,110 +1,116 @@
-# Система аналізу складських запасів (Warehouse Inventory Analyzer)
+# Система потокової обробки складських запасів
 
-**Курс:** Професійний Python
-**Лабораторна робота №2:** Структури даних та функціональна декомпозиція
-**Варіант №10:** «Аналіз системи обліку складських запасів»
+**Курс:** Професійний Python  
+**Лабораторна робота №3:** Ітератори, генератори та потокова обробка даних  
+**Варіант №10:** Потокова обробка складських запасів  
+**Студент:** Кузбит Іван Іванович
 
-## Опис проєкту
+## Опис
 
-Проєкт реалізує обробку та аналіз даних про складські запаси з використанням основних структур даних Python: `list`, `tuple`, `set`, `dict` та структури `Counter` з модуля `collections`.
+Лабораторна робота є продовженням `warehouse_lab2`. Реалізовано потоковий конвеєр для обробки великого CSV-набору складських запасів без повного завантаження проміжних даних у пам'ять.
 
-У програмі реалізовано:
-
-* list, set та dict comprehensions;
-* функціональну декомпозицію;
-* пошук товарів;
-* фільтрацію та сортування;
-* групування за категоріями;
-* агрегацію даних;
-* `*args` та `**kwargs`;
-* `lambda`;
-* closure;
-* декоратор вимірювання часу;
-* аналіз часової складності алгоритмів;
-* benchmark пошуку в `list` та `dict`.
-
-## Структура проєкту
+Формат основного набору:
 
 ```text
-warehouse_lab2/
+code,name,quantity,price,category
+```
+
+Окремий `data/operations.csv` використовується для потокової демонстрації надходжень (`receipt`) і списань (`issue`).
+
+## Реалізовано
+
+- iterable/iterator protocol та власний `InventoryCodeIterator`;
+- generator functions і `yield`;
+- `yield from`;
+- generator expression;
+- `itertools.islice`, `chain`, `accumulate`, `pairwise`;
+- streaming CSV reader;
+- parsing та validation;
+- filtering і transformation stages;
+- пошук позиції за кодом через lazy processing;
+- streaming обчислення загальної вартості;
+- lazy filter низького запасу;
+- визначення мінімальної та максимальної ціни;
+- valid/invalid records;
+- batch processing;
+- обробка надходжень і списань;
+- eager/lazy comparison часу та peak memory;
+- dataset на 100 000 записів;
+- pytest-тести.
+
+## Структура
+
+```text
+warehouse_lab3/
 ├── pyproject.toml
+├── requirements.txt
 ├── README.md
-├── benchmark_results.csv
+├── .gitignore
+├── data/
+│   ├── inventory.csv
+│   ├── operations.csv
+│   └── demo_inventory.csv
 ├── src/
 │   └── data_processor/
 │       ├── __init__.py
-│       ├── main.py
 │       ├── data.py
 │       ├── processors.py
 │       ├── analytics.py
 │       ├── decorators.py
-│       └── benchmark.py
+│       ├── benchmark.py
+│       ├── models.py
+│       ├── iterators.py
+│       ├── readers.py
+│       ├── parsers.py
+│       ├── filters.py
+│       ├── transformations.py
+│       ├── batches.py
+│       ├── pipeline.py
+│       ├── experiments.py
+│       ├── itertools_demo.py
+│       └── main.py
 └── tests/
-    └── test_processors.py
+    └── test_streaming.py
 ```
 
-## Основні файли
+## Встановлення
 
-* `data.py` — початкові дані про складські товари;
-* `processors.py` — пошук, фільтрація, сортування та групування;
-* `analytics.py` — аналітичні розрахунки;
-* `decorators.py` — декоратор вимірювання часу;
-* `benchmark.py` — порівняння швидкодії `list` та `dict`;
-* `main.py` — запуск і демонстрація роботи програми;
-* `test_processors.py` — автоматичні тести.
+Python 3.10 або новіший. У Git Bash / PowerShell у корені проєкту:
+
+```bash
+python -m venv .venv
+```
+
+Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+Git Bash:
+
+```bash
+source .venv/Scripts/activate
+pip install -r requirements.txt
+```
 
 ## Запуск
-
-Потрібен Python 3.10 або новіший.
 
 ```bash
 python -m src.data_processor.main
 ```
 
-Для запуску тестів:
+## Тести
 
 ```bash
-pytest
+pytest -q
 ```
 
-## Основні результати
+## Експеримент eager/lazy
 
-Загальна вартість складських запасів:
+Основна програма автоматично вимірює час виконання та peak memory через `tracemalloc`. Отримані значення залежать від комп'ютера, версії Python та поточного навантаження системи, тому для звіту використовуються результати фактичного запуску.
 
-```text
-468 479,00 грн
-```
+## Поточна лабораторна
 
-Найдорожча позиція:
-
-```text
-D001 — Відеокарта RTX
-Ціна: 34 999,00 грн
-```
-
-Критичний запас визначається як кількість товару, що не перевищує 5 одиниць.
-
-## Benchmark
-
-| Кількість записів |  `list`, с |  `dict`, с |
-| ----------------: | ---------: | ---------: |
-|             1 000 | 0.00011539 | 0.00000011 |
-|            10 000 | 0.00088249 | 0.00000006 |
-|           100 000 | 0.00904666 | 0.00000006 |
-
-Послідовний пошук у `list` має складність `O(n)`. Пошук за ключем у `dict` має середню складність `O(1)`. Експериментальні результати підтверджують цю залежність.
-
-## Використані можливості Python
-
-У проєкті продемонстровано:
-
-* `list`, `tuple`, `set`, `dict`;
-* `Counter`;
-* list, set та dict comprehensions;
-* функції з `*args` та `**kwargs`;
-* `lambda`;
-* closure;
-* decorator;
-* сортування, фільтрацію, групування та пошук;
-* оцінювання складності алгоритмів;
-* тестування та benchmark.
+ЛР3 розширює ЛР2 потоковою моделлю обробки даних. Наступні лабораторні можуть використовувати цей самий модуль як ядро для тестування, БД, REST API, оптимізації та production-оточення.
