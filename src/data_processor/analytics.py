@@ -7,7 +7,7 @@ from .models import InventoryRecord
 def calculate_total_value(products):
     """Обчислює загальну вартість усіх товарів на складі."""
     return sum(
-        product["quantity"] * product["price"]
+        product.quantity * product.price
         for product in products
     )
 
