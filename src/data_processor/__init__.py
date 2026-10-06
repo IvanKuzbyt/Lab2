@@ -1,1 +1,1 @@
-"""Обробка даних системи складського обліку."""
+"""Warehouse streaming processor for Lab 3."""
