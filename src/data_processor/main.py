@@ -1,42 +1,77 @@
-from .data import products, STOCK_POLICY
-from .processors import (get_unique_categories, create_inventory_index, find_product_by_code,
-    get_low_stock_items, group_by_category, count_products_by_category, filter_by_category, sort_by_price)
-from .analytics import calculate_total_value, find_most_expensive, calculate_average, create_product, create_stock_filter
-from .benchmark import run_benchmark
+from collections import Counter
+from itertools import islice
+from pathlib import Path
 
-def print_products(title: str, items: list[dict]) -> None:
-    print(f"\n{title}")
-    print("-" * 92)
-    print(f"{'Код':<7} {'Назва':<27} {'Категорія':<27} {'К-сть':>6} {'Ціна':>10} {'Вартість':>12}")
-    for p in items:
-        print(f"{p['code']:<7} {p['name']:<27} {p['category']:<27} {p['quantity']:>6} {p['price']:>10.2f} {p['quantity']*p['price']:>12.2f}")
+from .analytics import apply_operations, count_categories, count_valid_invalid, find_min_max_price, streaming_average_price, calculate_total_value
+from .batches import batched
+from .experiments import run_eager_lazy_experiment
+from .iterators import InventoryCodeIterator
+from .itertools_demo import demonstrate_itertools
+from .pipeline import build_pipeline, build_low_stock_pipeline
+from .readers import read_csv_rows
+
+ROOT = Path(__file__).resolve().parents[2]
+DATA = ROOT / "data"
+
 
 def main() -> None:
-    print_products("Складські запаси", products)
-    categories = get_unique_categories(products)
-    print("\nУнікальні категорії:", ", ".join(sorted(categories)))
-    print(f"Загальна вартість складу: {calculate_total_value(products):,.2f} грн")
-    print("Найдорожча позиція:", find_most_expensive(products))
-    print_products(f"Критичний запас (кількість <= {STOCK_POLICY[1]})", get_low_stock_items(products, STOCK_POLICY[1]))
-    print("\nПошук за кодом A003:", find_product_by_code(products, "A003"))
-    index = create_inventory_index(products)
-    print("Пошук через dict-index D001:", index.get("D001"))
-    print("\nГрупування за категоріями:")
-    for category, entries in group_by_category(products).items():
-        print(f"  {category}: {len(entries)} позицій")
-    print("\nCounter категорій:", count_products_by_category(products))
-    print_products("Сортування за ціною (спадання)", sort_by_price(products))
-    selected = filter_by_category(products, "Периферія")
-    print_products("Фільтр: Периферія", selected)
-    low_filter = create_stock_filter(3)
-    print("Closure (кількість <= 3):", [p["code"] for p in products if low_filter(p)])
-    print("Середнє значення цін через *args:", calculate_average(799, 2499, 3299, 1699))
-    added = create_product(code="E001", name="Кабель HDMI", category="Аксесуари", quantity=14, price=399.0)
-    print("Запис через **kwargs:", added)
-    print("\nBenchmark: найкращий час із 5 повторів, 100 пошуків у кожному повторі")
-    print(f"{'N':>8} | {'list, с':>12} | {'dict, с':>12}")
-    for n, lt, dt in run_benchmark():
-        print(f"{n:>8} | {lt:>12.8f} | {dt:>12.8f}")
+    inventory_path = DATA / "inventory.csv"
+    operations_path = DATA / "operations.csv"
+
+    print("=== Лабораторна робота №3: потокова обробка складських запасів ===")
+    print("Варіант №10 | Кузбит Іван Іванович")
+
+    first_records = list(islice(build_pipeline(inventory_path), 5))
+    print("\nПерші 5 валідних записів:")
+    for record in first_records:
+        print(record)
+
+    print("\nПошук позиції за кодом INV000010:")
+    found = next((r for r in build_pipeline(inventory_path) if r.code == "INV000010"), None)
+    print(found)
+
+    low_stock = list(islice(build_low_stock_pipeline(inventory_path, 5), 5))
+    print("\nПерші 5 позицій з низьким запасом (<= 5):")
+    for record in low_stock:
+        print(record.code, record.name, record.quantity)
+
+    total = calculate_total_value(build_pipeline(inventory_path))
+    minimum, maximum = find_min_max_price(build_pipeline(inventory_path))
+    average = streaming_average_price(build_pipeline(inventory_path))
+    valid, invalid = count_valid_invalid(read_csv_rows(inventory_path))
+    categories = count_categories(build_pipeline(inventory_path))
+
+    print(f"\nВалідних записів: {valid}")
+    print(f"Невалідних записів: {invalid}")
+    print(f"Загальна вартість складу: {total:,.2f} грн")
+    print(f"Мінімальна ціна: {minimum:.2f} грн")
+    print(f"Максимальна ціна: {maximum:.2f} грн")
+    print(f"Середня ціна: {average:.2f} грн")
+    print("Топ категорій:", categories.most_common(5))
+
+    print("\nBatch processing (перші 2 batches по 5 записів):")
+    for index, batch in enumerate(batched(build_pipeline(inventory_path), 5)):
+        print(f"Batch {index + 1}: {len(batch)} records")
+        if index == 1:
+            break
+
+    base_records = list(islice(build_pipeline(inventory_path), 100))
+    codes = [record.code for record in base_records]
+    print("\nВласний iterator:", list(InventoryCodeIterator(codes[:5])))
+
+    print("\nІнструменти itertools:", demonstrate_itertools())
+
+    stock = apply_operations(
+        (record for record in base_records),
+        read_csv_rows(operations_path),
+    )
+    print(f"Поточна кількість INV000001 після надходжень/списань: {stock.get('INV000001')}")
+
+    print("\nEager vs Lazy experiment:")
+    experiment = run_eager_lazy_experiment(inventory_path)
+    for mode, (elapsed, memory) in experiment.items():
+        print(f"{mode.capitalize():<6}: time={elapsed:.6f} s, peak_memory={memory:.3f} MB")
+
 
 if __name__ == "__main__":
     main()
