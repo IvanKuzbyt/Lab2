@@ -1,0 +1,7 @@
+code,operation,quantity
+INV000001,receipt,10
+INV000001,issue,3
+INV000002,issue,5
+INV000002,receipt,8
+INV000003,issue,999
+INV000004,receipt,12
