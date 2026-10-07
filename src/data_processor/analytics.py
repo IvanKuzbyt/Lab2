@@ -1,15 +1,17 @@
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
+from typing import Any
 
 from .models import InventoryRecord
 
 
-def calculate_total_value(products):
-    """Обчислює загальну вартість усіх товарів на складі."""
+def calculate_total_value(records: Iterable[InventoryRecord]) -> float:
     return sum(
-        product.quantity * product.price
-        for product in products
+        (record["quantity"] if isinstance(record, dict) else record.quantity)
+        * (record["price"] if isinstance(record, dict) else record.price)
+        for record in records
     )
+
 
 def streaming_average_price(records: Iterable[InventoryRecord]) -> float:
     total = 0.0
@@ -68,13 +70,39 @@ def apply_operations(records: Iterable[InventoryRecord], operations: Iterable[di
             continue
     return stock
 
-def find_most_expensive(products):
-    """Повертає товар із найвищою ціною."""
-    return max(products, key=lambda product: product["price"])
+def find_most_expensive(
+    records: Iterable[InventoryRecord | dict[str, Any]],
+) -> InventoryRecord | dict[str, Any] | None:
+    most_expensive: InventoryRecord | dict[str, Any] | None = None
+
+    for record in records:
+        price = record["price"] if isinstance(record, dict) else record.price
+
+        if most_expensive is None:
+            most_expensive = record
+            continue
+
+        max_price = (
+            most_expensive["price"]
+            if isinstance(most_expensive, dict)
+            else most_expensive.price
+        )
+
+        if price > max_price:
+            most_expensive = record
+
+    return most_expensive
 
 
-def create_stock_filter(min_quantity):
-    """Створює функцію для фільтрації товарів за залишком."""
-    return lambda product: product["quantity"] <= min_quantity
+def create_stock_filter(
+    max_quantity: int,
+) -> Callable[[InventoryRecord | dict[str, Any]], bool]:
+    def stock_filter(record: InventoryRecord | dict[str, Any]) -> bool:
+        quantity = (
+            record["quantity"]
+            if isinstance(record, dict)
+            else record.quantity
+        )
+        return quantity <= max_quantity
 
-
+    return stock_filter

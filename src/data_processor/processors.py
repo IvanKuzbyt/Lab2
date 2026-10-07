@@ -26,7 +26,9 @@ def group_by_category(items: list[dict[str, Any]]) -> dict[str, list[dict[str, A
         grouped[item["category"]].append(item)
     return dict(grouped)
 
-def count_products_by_category(items: list[dict[str, Any]]) -> Counter:
+def count_products_by_category(
+    items: list[dict[str, Any]],
+) -> Counter[str]:
     return Counter(item["category"] for item in items)
 
 def filter_items(items: list[dict[str, Any]], predicate: Callable[[dict[str, Any]], bool]) -> list[dict[str, Any]]:
