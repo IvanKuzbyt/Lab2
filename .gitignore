@@ -5,3 +5,10 @@ __pycache__/
 .idea/
 .vscode/
 *.egg-info/
+
+# Lab 4 local artifacts
+.venv/
+.mypy_cache/
+.pytest_cache/
+*.py[cod]
+__pycache__/

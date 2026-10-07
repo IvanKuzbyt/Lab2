@@ -3,14 +3,17 @@ requires = ["setuptools>=70"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "warehouse-data-processor"
-version = "0.2.0"
-description = "Lab 3: iterators, generators and streaming warehouse data processing"
-requires-python = ">=3.10"
+name = "warehouse-manager-oop"
+version = "0.4.0"
+description = "Lab 4 OOP model integrated with Lab 3 streaming warehouse pipeline"
+requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
-test = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "mypy>=1.10"]
+
+[project.scripts]
+warehouse-manager = "warehouse_manager.main:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -21,3 +24,10 @@ where = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = true
+warn_return_any = true
+mypy_path = "src"
