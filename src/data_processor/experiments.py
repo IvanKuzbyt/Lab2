@@ -4,6 +4,7 @@ import gc
 import time
 import tracemalloc
 from pathlib import Path
+from collections.abc import Callable
 
 from .analytics import calculate_total_value
 from .pipeline import build_pipeline
@@ -18,14 +19,20 @@ def lazy_total(path: Path) -> float:
     return calculate_total_value(build_pipeline(path))
 
 
-def measure(function, path: Path) -> tuple[float, float, float]:
+def measure(
+    function: Callable[[Path], float],
+    path: Path,
+) -> tuple[float, float, float]:
     gc.collect()
     tracemalloc.start()
     started = time.perf_counter()
+
     result = function(path)
+
     elapsed = time.perf_counter() - started
     _, peak = tracemalloc.get_traced_memory()
     tracemalloc.stop()
+
     return result, elapsed, peak / (1024 * 1024)
 
 

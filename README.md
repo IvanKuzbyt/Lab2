@@ -1,116 +1,50 @@
-# Система потокової обробки складських запасів
+# Система обліку складських запасів — лабораторна робота №4
 
 **Курс:** Професійний Python  
-**Лабораторна робота №3:** Ітератори, генератори та потокова обробка даних  
-**Варіант №10:** Потокова обробка складських запасів  
+**Варіант:** 10 — система обліку складських запасів  
 **Студент:** Кузбит Іван Іванович
 
-## Опис
+## Продовження лабораторної роботи №3
 
-Лабораторна робота є продовженням `warehouse_lab2`. Реалізовано потоковий конвеєр для обробки великого CSV-набору складських запасів без повного завантаження проміжних даних у пам'ять.
+Проєкт створено на основі наданого архіву `warehouse_lab3`, а не як окрему незалежну програму. Збережено каталог `data/` з `inventory.csv` (100 000 рядків даних), `operations.csv`, `demo_inventory.csv`, пакет `data_processor` з reader/parser/validation/transformations/pipeline, аналітикою, batching, itertools та eager/lazy експериментами, а також попередні потокові тести.
 
-Формат основного набору:
+У лабораторній №4 додано пакет `warehouse_manager`, який перетворює записи `InventoryRecord` із потокового конвеєра на доменні об'єкти `Product`, `WarehouseItem` і `Warehouse`. Повний CSV обробляється потоково для статистики; об'єктна модель для демонстрації створюється на обмеженій вибірці з перших 10 валідних записів. Операції для демонстрації беруться з наявного `data/operations.csv`.
 
-```text
-code,name,quantity,price,category
-```
+## ООП і система типів
 
-Окремий `data/operations.csv` використовується для потокової демонстрації надходжень (`receipt`) і списань (`issue`).
+- dataclass-моделі та immutable value object `Money`;
+- інкапсуляція, properties і перевірка складських залишків;
+- наслідування та поліморфізм для надходження/списання через `ABC`;
+- композиція складу, позицій, товарів і постачальника;
+- `Protocol`, dependency injection і розділені сервіси;
+- generic repository `InMemoryRepository[T]`, `TypeVar` з bound `HasId`, `TypedDict`;
+- dunder methods, принципи SOLID і конфігурація mypy strict.
 
-## Реалізовано
-
-- iterable/iterator protocol та власний `InventoryCodeIterator`;
-- generator functions і `yield`;
-- `yield from`;
-- generator expression;
-- `itertools.islice`, `chain`, `accumulate`, `pairwise`;
-- streaming CSV reader;
-- parsing та validation;
-- filtering і transformation stages;
-- пошук позиції за кодом через lazy processing;
-- streaming обчислення загальної вартості;
-- lazy filter низького запасу;
-- визначення мінімальної та максимальної ціни;
-- valid/invalid records;
-- batch processing;
-- обробка надходжень і списань;
-- eager/lazy comparison часу та peak memory;
-- dataset на 100 000 записів;
-- pytest-тести.
-
-## Структура
-
-```text
-warehouse_lab3/
-├── pyproject.toml
-├── requirements.txt
-├── README.md
-├── .gitignore
-├── data/
-│   ├── inventory.csv
-│   ├── operations.csv
-│   └── demo_inventory.csv
-├── src/
-│   └── data_processor/
-│       ├── __init__.py
-│       ├── data.py
-│       ├── processors.py
-│       ├── analytics.py
-│       ├── decorators.py
-│       ├── benchmark.py
-│       ├── models.py
-│       ├── iterators.py
-│       ├── readers.py
-│       ├── parsers.py
-│       ├── filters.py
-│       ├── transformations.py
-│       ├── batches.py
-│       ├── pipeline.py
-│       ├── experiments.py
-│       ├── itertools_demo.py
-│       └── main.py
-└── tests/
-    └── test_streaming.py
-```
-
-## Встановлення
-
-Python 3.10 або новіший. У Git Bash / PowerShell у корені проєкту:
-
-```bash
-python -m venv .venv
-```
-
-Windows PowerShell:
+## Встановлення у Windows PowerShell
 
 ```powershell
+python -m venv .venv
 .venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-Git Bash:
-
-```bash
-source .venv/Scripts/activate
-pip install -r requirements.txt
+python -m pip install -e ".[dev]"
 ```
 
 ## Запуск
 
-```bash
-python -m src.data_processor.main
+```powershell
+python -m warehouse_manager.main
 ```
 
-## Тести
+Попередня потокова демонстрація ЛР3 також збережена:
 
-```bash
-pytest -q
+```powershell
+python -m data_processor.main
 ```
 
-## Експеримент eager/lazy
+## Тести та перевірка типів
 
-Основна програма автоматично вимірює час виконання та peak memory через `tracemalloc`. Отримані значення залежать від комп'ютера, версії Python та поточного навантаження системи, тому для звіту використовуються результати фактичного запуску.
+```powershell
+python -m pytest -q
+python -m mypy src
+```
 
-## Поточна лабораторна
-
-ЛР3 розширює ЛР2 потоковою моделлю обробки даних. Наступні лабораторні можуть використовувати цей самий модуль як ядро для тестування, БД, REST API, оптимізації та production-оточення.
+Type-checking experiment наведено в `docs/type_checking_experiment.md`. Навмисні помилки потрібно перевірити в окремому тимчасовому файлі, зафіксувати фактичні diagnostics, а потім видалити його. У середовищі створення архіву встановити mypy через мережу не вдалося, тому успішний запуск mypy не заявляється.
