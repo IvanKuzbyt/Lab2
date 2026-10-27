@@ -1,0 +1,28 @@
+........................................................................ [ 86%]
+...........                                                              [100%]
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.13.5-final-0 ________________
+
+Name                                     Stmts   Miss Branch BrPart  Cover   Missing
+------------------------------------------------------------------------------------
+src/reliable_importer/__init__.py            0      0      0      0   100%
+src/reliable_importer/config.py             37      3     10      3    87%   20, 30, 36
+src/reliable_importer/exceptions.py         10      0     10      0   100%
+src/reliable_importer/exporters.py          35      1      6      1    95%   21->23, 37
+src/reliable_importer/main.py               24     24      2      0     0%   1-26
+src/reliable_importer/readers.py            15      1      4      0    95%   16
+src/reliable_importer/services.py           34      0      6      0   100%
+src/reliable_importer/validators.py         15      0      6      0   100%
+src/warehouse_manager/__init__.py            1      0      0      0   100%
+src/warehouse_manager/dto.py                 8      0      0      0   100%
+src/warehouse_manager/main.py               63     32     10      1    47%   51-92, 96
+src/warehouse_manager/models.py            101      6     18      0    93%   41-43, 46, 106, 137
+src/warehouse_manager/operations.py         25      2      6      2    87%   13, 37
+src/warehouse_manager/protocols.py           5      0      0      0   100%
+src/warehouse_manager/repositories.py       19      1      2      1    90%   21
+src/warehouse_manager/services.py           43      1      6      1    96%   77
+src/warehouse_manager/value_objects.py      29      5     10      3    79%   17-18, 28, 30, 35
+------------------------------------------------------------------------------------
+TOTAL                                      464     76     96     12    82%
+Coverage HTML written to dir htmlcov
+83 passed in 0.33s
