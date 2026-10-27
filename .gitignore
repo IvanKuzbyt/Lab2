@@ -1,40 +1,21 @@
-# Virtual environments
 .venv/
-venv/
-env/
-
-# Python cache
 __pycache__/
-*.py[cod]
-*$py.class
-
-# Testing
 .pytest_cache/
-.mypy_cache/
-.coverage
-.coverage.*
-htmlcov/
-.tox/
-
-# IDE settings
+*.pyc
 .idea/
 .vscode/
-
-# Python packaging
 *.egg-info/
-build/
-dist/
 
-# Logs
-*.log
-logs/
+# Lab 4 local artifacts
+.venv/
+.mypy_cache/
+.pytest_cache/
+*.py[cod]
+__pycache__/
 
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*~
-
-# Operating system
-.DS_Store
-Thumbs.db
+# Lab 6 testing artifacts
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.mypy_cache/
