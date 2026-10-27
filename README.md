@@ -48,3 +48,17 @@ python -m mypy src
 ```
 
 Type-checking experiment наведено в `docs/type_checking_experiment.md`. Навмисні помилки потрібно перевірити в окремому тимчасовому файлі, зафіксувати фактичні diagnostics, а потім видалити його. У середовищі створення архіву встановити mypy через мережу не вдалося, тому успішний запуск mypy не заявляється.
+
+
+## ЛР5: надійний CSV → JSON імпорт
+Python 3.11+, PyYAML. Збережені пакети data_processor і warehouse_manager із ЛР3–4.
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+python -m reliable_importer.main --config config.yaml
+python -m pytest -q
+```
+
+У Linux/macOS активуйте `source .venv/bin/activate`. Конфігурація задає CSV, JSON, поріг запасу, strict/tolerant і log. При strict-помилці вихідний JSON залишається незмінним.

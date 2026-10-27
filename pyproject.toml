@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "warehouse-manager-oop"
-version = "0.4.0"
+version = "0.5.0"
 description = "Lab 4 OOP model integrated with Lab 3 streaming warehouse pipeline"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["PyYAML>=6.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "mypy>=1.10"]
