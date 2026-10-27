@@ -1,0 +1,7 @@
+rows,mode,seconds,peak_memory_mib
+10000,eager,0.118,3.94
+10000,streaming,0.051,0.05
+100000,eager,0.61,39.28
+100000,streaming,0.598,0.05
+500000,eager,4.644,196.85
+500000,streaming,2.875,0.05
