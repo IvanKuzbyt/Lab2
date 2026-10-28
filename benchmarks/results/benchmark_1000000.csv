@@ -1,0 +1,11 @@
+method,data_size,workers,mean_seconds,peak_memory_mb,speedup,python
+Python baseline total,1000000,1,0.03428251,,1.000,3.13.5
+Python full statistics,1000000,1,0.19219531,30.944,1.000,3.13.5
+NumPy vectorized,1000000,1,0.21751451,,0.884,3.13.5
+ThreadPoolExecutor,1000000,1,0.04045658,,0.847,3.13.5
+ProcessPoolExecutor,1000000,1,0.45354249,,0.076,3.13.5
+ThreadPoolExecutor,1000000,2,0.04272486,,0.802,3.13.5
+ProcessPoolExecutor,1000000,2,0.36215755,,0.095,3.13.5
+ThreadPoolExecutor,1000000,4,0.04320256,,0.794,3.13.5
+ProcessPoolExecutor,1000000,4,0.28300758,,0.121,3.13.5
+Cached warm,1000000,1,0.00000061,,315074.279,3.13.5
