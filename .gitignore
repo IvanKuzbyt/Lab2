@@ -19,3 +19,8 @@ htmlcov/
 .coverage.*
 .pytest_cache/
 .mypy_cache/
+
+# Lab 7 local databases
+*.db
+*.sqlite
+*.sqlite3
