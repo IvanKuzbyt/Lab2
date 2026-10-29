@@ -26,8 +26,7 @@ class ReceiptOperation(StockOperation):
         if item is None:
             raise KeyError(f"Товар {self.code} не знайдено")
         item.receive(self.quantity)
-        return StockOperationResult(self.operation_id, self.code, "надходження",
-                                    self.quantity, item.quantity)
+        return StockOperationResult(self.operation_id, self.code, "надходження", self.quantity, item.quantity)
 
 
 class WriteOffOperation(StockOperation):
@@ -36,5 +35,4 @@ class WriteOffOperation(StockOperation):
         if item is None:
             raise KeyError(f"Товар {self.code} не знайдено")
         item.write_off(self.quantity)
-        return StockOperationResult(self.operation_id, self.code, "списання",
-                                    self.quantity, item.quantity)
+        return StockOperationResult(self.operation_id, self.code, "списання", self.quantity, item.quantity)

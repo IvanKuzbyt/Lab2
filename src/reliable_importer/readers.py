@@ -3,6 +3,7 @@ from pathlib import Path
 from collections.abc import Iterator
 from .exceptions import DataImportError
 
+
 def read_rows(path: Path) -> Iterator[tuple[int, dict[str, str | None]]]:
     try:
         with path.open(encoding="utf-8-sig", newline="") as file:

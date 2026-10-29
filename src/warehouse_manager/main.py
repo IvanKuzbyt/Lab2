@@ -41,7 +41,6 @@ def build_service_from_records(records: Iterable[InventoryRecord]) -> WarehouseS
 
 def build_demo_service() -> WarehouseService:
     """Small fallback demo used by isolated OOP unit tests."""
-    from data_processor.models import InventoryRecord
     demo_path = DATA / "demo_inventory.csv"
     records = list(islice(build_pipeline(demo_path), 4))
     return build_service_from_records(records)

@@ -3,6 +3,7 @@ from pathlib import Path
 import yaml
 from .exceptions import ConfigurationError
 
+
 @dataclass(frozen=True)
 class AppConfig:
     input_path: Path
@@ -11,6 +12,7 @@ class AppConfig:
     threshold: int
     skip_invalid: bool
     level: str
+
 
 def load_config(path: Path) -> AppConfig:
     try:

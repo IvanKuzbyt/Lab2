@@ -1,4 +1,3 @@
-
 """Application services and interchangeable policies."""
 
 from dataclasses import dataclass
@@ -80,39 +79,26 @@ class WarehouseService:
                 payload["quantity"],
             )
         else:
-            raise ValueError(
-                "Тип операції має бути receipt або write_off"
-            )
+            raise ValueError("Тип операції має бути receipt або write_off")
 
         return operation.execute(self._warehouse)
 
     def low_stock(self) -> list[WarehouseItem]:
         """Return items that require replenishment."""
-        return [
-            item
-            for item in self._warehouse
-            if self._reorder_policy.should_reorder(item)
-        ]
+        return [item for item in self._warehouse if self._reorder_policy.should_reorder(item)]
 
     def reorder_suggestions(self) -> list[str]:
         """Build replenishment suggestions for low-stock items."""
         return [
-            f"{item.product.code}: замовити "
-            f"{self._reorder_policy.recommended_quantity(item)} од."
+            f"{item.product.code}: замовити {self._reorder_policy.recommended_quantity(item)} од."
             for item in self._warehouse
             if self._reorder_policy.should_reorder(item)
         ]
 
     def inventory_report(self) -> str:
         """Generate a report containing items and total inventory value."""
-        lines = [
-            str(item)
-            + f"; ціна={item.product.price}; сума={item.total_value}"
-            for item in self._warehouse
-        ]
-        lines.append(
-            f"Загальна вартість: {self._warehouse.total_value}"
-        )
+        lines = [str(item) + f"; ціна={item.product.price}; сума={item.total_value}" for item in self._warehouse]
+        lines.append(f"Загальна вартість: {self._warehouse.total_value}")
         return self._report_service.render(
             "Звіт складських запасів",
             lines,

@@ -70,6 +70,7 @@ def apply_operations(records: Iterable[InventoryRecord], operations: Iterable[di
             continue
     return stock
 
+
 def find_most_expensive(
     records: Iterable[InventoryRecord | dict[str, Any]],
 ) -> InventoryRecord | dict[str, Any] | None:
@@ -82,11 +83,7 @@ def find_most_expensive(
             most_expensive = record
             continue
 
-        max_price = (
-            most_expensive["price"]
-            if isinstance(most_expensive, dict)
-            else most_expensive.price
-        )
+        max_price = most_expensive["price"] if isinstance(most_expensive, dict) else most_expensive.price
 
         if price > max_price:
             most_expensive = record
@@ -98,11 +95,7 @@ def create_stock_filter(
     max_quantity: int,
 ) -> Callable[[InventoryRecord | dict[str, Any]], bool]:
     def stock_filter(record: InventoryRecord | dict[str, Any]) -> bool:
-        quantity = (
-            record["quantity"]
-            if isinstance(record, dict)
-            else record.quantity
-        )
+        quantity = record["quantity"] if isinstance(record, dict) else record.quantity
         return quantity <= max_quantity
 
     return stock_filter

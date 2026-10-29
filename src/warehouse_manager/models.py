@@ -82,8 +82,7 @@ class WarehouseItem:
         self._quantity -= quantity
 
     def __repr__(self) -> str:
-        return (f"WarehouseItem(id={self.id}, code={self.product.code!r}, "
-                f"quantity={self.quantity})")
+        return f"WarehouseItem(id={self.id}, code={self.product.code!r}, quantity={self.quantity})"
 
 
 @dataclass(slots=True)
@@ -134,5 +133,7 @@ class StockOperationResult:
     quantity_after: int
 
     def __str__(self) -> str:
-        return (f"Операція #{self.operation_id}: {self.operation} {self.code}, "
-                f"кількість після операції: {self.quantity_after}")
+        return (
+            f"Операція #{self.operation_id}: {self.operation} {self.code}, "
+            f"кількість після операції: {self.quantity_after}"
+        )

@@ -1,8 +1,14 @@
-from collections import Counter
 from itertools import islice
 from pathlib import Path
 
-from .analytics import apply_operations, count_categories, count_valid_invalid, find_min_max_price, streaming_average_price, calculate_total_value
+from .analytics import (
+    apply_operations,
+    count_categories,
+    count_valid_invalid,
+    find_min_max_price,
+    streaming_average_price,
+    calculate_total_value,
+)
 from .batches import batched
 from .experiments import run_eager_lazy_experiment
 from .iterators import InventoryCodeIterator

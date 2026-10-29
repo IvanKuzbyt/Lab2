@@ -8,11 +8,13 @@ from .validators import validate
 from .exceptions import RecordValidationError
 from .exporters import export_json
 
+
 @dataclass
 class Statistics:
     valid: int = 0
     invalid: int = 0
     low_stock: int = 0
+
 
 def import_records(config: AppConfig, stats: Statistics) -> Iterator[InventoryRecord]:
     logger = logging.getLogger(__name__)
@@ -30,6 +32,7 @@ def import_records(config: AppConfig, stats: Statistics) -> Iterator[InventoryRe
             stats.low_stock += 1
             logger.warning("Low stock for %s: %s", record.code, record.quantity)
         yield record
+
 
 def run(config: AppConfig) -> Statistics:
     stats = Statistics()

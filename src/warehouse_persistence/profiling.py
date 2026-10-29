@@ -1,4 +1,5 @@
 """CPU and memory profiling of actual warehouse analytics."""
+
 from __future__ import annotations
 import cProfile
 import io
@@ -6,14 +7,16 @@ import pstats
 import tracemalloc
 from .analytics import statistics_python
 
+
 def profile_catalog(items, top=12):
     profiler = cProfile.Profile()
     profiler.enable()
     result = statistics_python(items)
     profiler.disable()
     output = io.StringIO()
-    pstats.Stats(profiler, stream=output).sort_stats('cumulative').print_stats(top)
+    pstats.Stats(profiler, stream=output).sort_stats("cumulative").print_stats(top)
     return result, output.getvalue()
+
 
 def memory_profile(items):
     tracemalloc.start()

@@ -1,4 +1,3 @@
-
 from timeit import repeat
 from typing import Any
 
@@ -23,21 +22,27 @@ def run_benchmark() -> list[tuple[int, float, float]]:
         target: str = items[-1]["code"]
         index = create_inventory_index(items)
 
-        list_time = min(
-            repeat(
-                lambda: find_product_by_code(items, target),
-                number=100,
-                repeat=5,
+        list_time = (
+            min(
+                repeat(
+                    lambda: find_product_by_code(items, target),
+                    number=100,
+                    repeat=5,
+                )
             )
-        ) / 100
+            / 100
+        )
 
-        dict_time = min(
-            repeat(
-                lambda: index.get(target),
-                number=100,
-                repeat=5,
+        dict_time = (
+            min(
+                repeat(
+                    lambda: index.get(target),
+                    number=100,
+                    repeat=5,
+                )
             )
-        ) / 100
+            / 100
+        )
 
         results.append((size, list_time, dict_time))
 
