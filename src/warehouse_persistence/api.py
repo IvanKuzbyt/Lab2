@@ -77,7 +77,9 @@ async def create_product(data: ProductCreate, session: Session = Depends(get_ses
 
 
 @app.patch("/products/{product_id}", response_model=ProductOut, tags=["products"])
-async def patch_product(product_id: int, data: ProductPatch, session: Session = Depends(get_session)) -> ProductRecord | None:
+async def patch_product(
+    product_id: int, data: ProductPatch, session: Session = Depends(get_session)
+) -> ProductRecord | None:
     repo = ProductRepository(session)
     require_product(repo, product_id)
     return cast(ProductRecord | None, repo.update(product_id, **data.model_dump(exclude_unset=True)))
@@ -105,12 +107,16 @@ async def incoming(product_id: int, data: StockChange, session: Session = Depend
 
 
 @app.post("/products/{product_id}/write-off", response_model=StockOperationOut, status_code=201, tags=["stock"])
-async def write_off(product_id: int, data: StockChange, session: Session = Depends(get_session)) -> StockOperationRecord:
+async def write_off(
+    product_id: int, data: StockChange, session: Session = Depends(get_session)
+) -> StockOperationRecord:
     return apply_movement(session, product_id, "write_off", data.quantity)
 
 
 @app.get("/stock/operations", response_model=list[StockOperationOut], tags=["stock"])
-async def operations(product_id: int | None = None, session: Session = Depends(get_session)) -> list[StockOperationRecord]:
+async def operations(
+    product_id: int | None = None, session: Session = Depends(get_session)
+) -> list[StockOperationRecord]:
     from sqlalchemy import select
 
     if product_id is not None:
