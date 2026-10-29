@@ -1,15 +1,15 @@
-         107930 function calls in 0.041 seconds
+         1079597 function calls in 0.262 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.004    0.004    0.041    0.041 C:\Project\Lab2\src\warehouse_persistence\analytics.py:22(statistics_python)
-        4    0.015    0.004    0.035    0.009 {built-in method builtins.sum}
-   100001    0.017    0.000    0.017    0.000 C:\Project\Lab2\src\warehouse_persistence\analytics.py:27(<genexpr>)
-        1    0.000    0.000    0.004    0.004 C:\Project\Lab2\src\warehouse_persistence\analytics.py:19(low_stock_python)
-     7918    0.003    0.000    0.003    0.000 C:\Project\Lab2\src\warehouse_persistence\analytics.py:20(<genexpr>)
-        1    0.001    0.001    0.001    0.001 {built-in method builtins.max}
-        1    0.001    0.001    0.001    0.001 {built-in method builtins.min}
+        1    0.034    0.034    0.262    0.262 /mnt/data/lab9_work/warehouse_lab5/src/warehouse_persistence/analytics.py:22(statistics_python)
+        4    0.086    0.021    0.210    0.052 {built-in method builtins.sum}
+  1000001    0.101    0.000    0.101    0.000 /mnt/data/lab9_work/warehouse_lab5/src/warehouse_persistence/analytics.py:27(<genexpr>)
+        1    0.000    0.000    0.028    0.028 /mnt/data/lab9_work/warehouse_lab5/src/warehouse_persistence/analytics.py:19(low_stock_python)
+    79585    0.023    0.000    0.023    0.000 /mnt/data/lab9_work/warehouse_lab5/src/warehouse_persistence/analytics.py:20(<genexpr>)
+        1    0.009    0.009    0.009    0.009 {built-in method builtins.max}
+        1    0.008    0.008    0.008    0.008 {built-in method builtins.min}
         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
         1    0.000    0.000    0.000    0.000 {built-in method math.sqrt}
         1    0.000    0.000    0.000    0.000 {built-in method builtins.len}
