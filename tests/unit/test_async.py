@@ -1,8 +1,10 @@
 import asyncio
 from unittest.mock import AsyncMock
 
+
 async def fetch_reorder_status(provider, code: str):
     return await provider.fetch_status(code)
+
 
 def test_async_reorder_provider():
     provider = AsyncMock()

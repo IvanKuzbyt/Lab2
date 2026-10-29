@@ -69,7 +69,10 @@ def test_service_uses_injected_reorder_and_report_services() -> None:
 def test_typed_dict_operation_payload() -> None:
     service = build_demo_service()
     payload: StockOperationPayload = {
-        "operation_id": 50, "code": "A001", "operation": "receipt", "quantity": 2,
+        "operation_id": 50,
+        "code": "A001",
+        "operation": "receipt",
+        "quantity": 2,
     }
     result = service.apply_operation(payload)
     assert result.quantity_after == 6

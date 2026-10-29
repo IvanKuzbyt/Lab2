@@ -1,4 +1,5 @@
 """Reproducible experiments from the Lab 6 handout."""
+
 from unittest.mock import Mock
 import pytest
 from warehouse_manager.models import Warehouse
