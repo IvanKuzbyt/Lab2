@@ -24,3 +24,9 @@ htmlcov/
 *.db
 *.sqlite
 *.sqlite3
+
+# Lab 10 build and configuration
+.env
+dist/
+build/
+*.whl

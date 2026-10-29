@@ -62,3 +62,7 @@ python -m pytest -q
 ```
 
 У Linux/macOS активуйте `source .venv/bin/activate`. Конфігурація задає CSV, JSON, поріг запасу, strict/tolerant і log. При strict-помилці вихідний JSON залишається незмінним.
+
+
+## ЛР10: production packaging, Docker, CI/CD
+Див. [README_LAB10.md](README_LAB10.md) для встановлення, конфігурації, Docker, API, тестів і сценарію захисту.
